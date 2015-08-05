@@ -219,9 +219,5 @@ public interface WebContext {
 	public Locale locale();
 	
 	public I18n i18n();
-
-	public boolean hasPermission(String permission);
-
-	public boolean hasRole(String role);
-
+	
 }
