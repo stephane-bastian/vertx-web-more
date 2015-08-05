@@ -210,7 +210,6 @@ import com.thesoftwarefactory.vertx.web.model.I18n;
 import com.thesoftwarefactory.vertx.web.more.Flash;
 import com.thesoftwarefactory.vertx.web.more.WebContext;
 
-import io.vertx.ext.auth.User;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.Session;
 
@@ -255,20 +254,13 @@ public class WebContextImpl implements WebContext {
 		return locale;
 	}
 
+	protected RoutingContext routingContext() {
+		return routingContext;
+	}
+	
 	@Override
 	public Session session() {
 		return routingContext.session();
 	}
-
-	@Override
-	public boolean hasPermission(String permission) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean hasRole(String role) {
-		return false; //routingContext.user().isAuthorised("role:" + role, resultHandler);
-	}
-
+	
 }
