@@ -8,14 +8,14 @@ import io.vertx.core.json.JsonObject;
 
 public class Configs {
 
-	public final static Map<String, Object> extract(Map<String, Object> map, String prefixKey, boolean foldKeyNames) {
-		Map<String, Object> result = new HashMap<>();
+	public final static Map<String, String> extract(Map<String, Object> map, String prefixKey, boolean foldKeyNames) {
+		Map<String, String> result = new HashMap<>();
 		if (map!=null && prefixKey!=null) {
 			for (String key: map.keySet()) {
 				if (key.startsWith(prefixKey)) {
 					Object value = map.get(key);
 					String targetKey = foldKeyNames ? key.substring(prefixKey.length()+1) : key;
-					result.put(targetKey, value);
+					result.put(targetKey, value.toString());
 				}
 			}
 		}

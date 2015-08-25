@@ -47,16 +47,16 @@ public class TestConfigs {
 	public void testExtract() {
 		JsonObject flattenJson = Configs.flatten(testJson());
 		Map<String, Object> map = flattenJson.getMap();
-		Map<String, Object> map2 = Configs.extract(map, "object.object", false);
+		Map<String, String> map2 = Configs.extract(map, "object.object", false);
 		assertTrue(map2.size()==3);
-		assertTrue(map2.get("object.object.boolean").equals(true));
-		assertTrue(map2.get("object.object.int").equals(3));
+		assertTrue(map2.get("object.object.boolean").equals("true"));
+		assertTrue(map2.get("object.object.int").equals("3"));
 		assertTrue(map2.get("object.object.string").equals("string value"));
 
-		Map<String, Object> map3 = Configs.extract(map, "object.object", true);
+		Map<String, String> map3 = Configs.extract(map, "object.object", true);
 		assertTrue(map3.size()==3);
-		assertTrue(map3.get("boolean").equals(true));
-		assertTrue(map3.get("int").equals(3));
+		assertTrue(map3.get("boolean").equals("true"));
+		assertTrue(map3.get("int").equals("3"));
 		assertTrue(map3.get("string").equals("string value"));
 	}
 	
