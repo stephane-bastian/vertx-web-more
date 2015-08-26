@@ -212,16 +212,18 @@ import io.vertx.ext.web.Session;
 
 public interface WebContext {
 
-	public Session session();
+	public DeviceInfo deviceInfo();
 	
 	public Flash flash();
 	
-	public Locale locale();
-	
 	public I18n i18n();
 	
-	public UserContext userContext();
+	public Locale locale();
 	
-	public DeviceInfo deviceInfo();
+	public Session session();
+	
+	public String uri();
+	
+	public UserContext userContext();
 	
 }

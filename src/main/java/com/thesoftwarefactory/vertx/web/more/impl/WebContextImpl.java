@@ -279,6 +279,11 @@ public class WebContextImpl implements WebContext {
 	}
 
 	@Override
+	public String uri() {
+		return routingContext.request().uri();
+	}
+
+	@Override
 	public UserContext userContext() {
 		if (userContext==null) {
 			if (routingContext.user() instanceof UserContext) {
