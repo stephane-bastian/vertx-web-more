@@ -220,4 +220,8 @@ public interface WebContext {
 	
 	public I18n i18n();
 	
+	public UserContext userContext();
+	
+	public DeviceInfo deviceInfo();
+	
 }

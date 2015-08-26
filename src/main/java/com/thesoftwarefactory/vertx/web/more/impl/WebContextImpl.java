@@ -207,18 +207,23 @@ import java.util.Locale;
 import java.util.Objects;
 
 import com.thesoftwarefactory.vertx.web.model.I18n;
+import com.thesoftwarefactory.vertx.web.more.DeviceInfo;
 import com.thesoftwarefactory.vertx.web.more.Flash;
+import com.thesoftwarefactory.vertx.web.more.UserContext;
 import com.thesoftwarefactory.vertx.web.more.WebContext;
 
+import io.vertx.core.http.HttpHeaders;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.Session;
 
 public class WebContextImpl implements WebContext {
 
-	private RoutingContext routingContext;
+	private DeviceInfo deviceInfo;
+	private Flash flash;
 	private I18n i18n;
 	private Locale locale;
-	private Flash flash;
+	private RoutingContext routingContext;
+	private UserContext userContext;
 	
 	public WebContextImpl(RoutingContext routingContext) {
 		Objects.requireNonNull(routingContext);
@@ -227,6 +232,16 @@ public class WebContextImpl implements WebContext {
 	}
 	
 	@Override
+	public DeviceInfo deviceInfo() {
+		if (deviceInfo==null) {
+			String userAgent = routingContext.request().getHeader(HttpHeaders.USER_AGENT.toString());
+			String httpAccept = routingContext.request().getHeader(HttpHeaders.ACCEPT.toString());
+			deviceInfo = new DeviceInfoMobileEsp(userAgent, httpAccept);
+		}
+		return deviceInfo;
+	}
+
+	@Override
 	public Flash flash() {
 		if (flash==null) {
 			flash = routingContext.get("__flash");
@@ -234,6 +249,7 @@ public class WebContextImpl implements WebContext {
 		return flash;
 	}
 
+	
 	@Override
 	public I18n i18n() {
 		if (i18n==null) {
@@ -242,7 +258,6 @@ public class WebContextImpl implements WebContext {
 		return i18n;
 	}
 
-	
 	@Override
 	public Locale locale() {
 		if (locale==null) {
@@ -253,14 +268,27 @@ public class WebContextImpl implements WebContext {
 		}
 		return locale;
 	}
-
+	
 	protected RoutingContext routingContext() {
 		return routingContext;
 	}
-	
+
 	@Override
 	public Session session() {
 		return routingContext.session();
+	}
+
+	@Override
+	public UserContext userContext() {
+		if (userContext==null) {
+			if (routingContext.user() instanceof UserContext) {
+				userContext = (UserContext) routingContext.user();
+			}
+			else {
+				userContext = UserContextImpl.anonymous();
+			}
+		}
+		return userContext;
 	}
 	
 }
