@@ -8,8 +8,8 @@ import io.vertx.core.json.JsonObject;
 
 public class Configs {
 
-	public final static Map<String, String> extract(JsonObject jsonObject, String prefixKey, boolean foldKeyNames) {
-		return extract(jsonObject!=null ? jsonObject.getMap() : null, prefixKey, foldKeyNames);
+	public final static Map<String, String> flattenAndExtract(JsonObject jsonObject, String prefixKey, boolean foldKeyNames) {
+		return extract(flatten(jsonObject).getMap(), prefixKey, foldKeyNames);
 	}
 	
 	public final static Map<String, String> extract(Map<String, Object> map, String prefixKey, boolean foldKeyNames) {
