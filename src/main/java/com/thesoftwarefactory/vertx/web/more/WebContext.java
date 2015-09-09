@@ -203,6 +203,7 @@
  */
 package com.thesoftwarefactory.vertx.web.more;
 
+import java.util.Collection;
 import java.util.Locale;
 
 import com.thesoftwarefactory.vertx.web.model.I18n;
@@ -220,10 +221,12 @@ public interface WebContext {
 	
 	public Locale locale();
 	
+	public String referer();
+	
 	public Session session();
 	
 	public String uri();
 	
 	public UserContext userContext();
-	
+
 }

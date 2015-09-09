@@ -222,6 +222,7 @@ public class WebContextImpl implements WebContext {
 	private Flash flash;
 	private I18n i18n;
 	private Locale locale;
+	private String referer;
 	private RoutingContext routingContext;
 	private UserContext userContext;
 	
@@ -269,6 +270,14 @@ public class WebContextImpl implements WebContext {
 		return locale;
 	}
 	
+	@Override
+	public String referer() {
+		if (referer==null) {
+			referer = routingContext.request().getHeader(HttpHeaders.REFERER.toString());
+		}
+		return referer;
+	}
+
 	protected RoutingContext routingContext() {
 		return routingContext;
 	}
