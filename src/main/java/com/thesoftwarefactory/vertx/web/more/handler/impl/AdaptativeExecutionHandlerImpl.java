@@ -277,6 +277,7 @@ public class AdaptativeExecutionHandlerImpl implements AdaptativeExecutionHandle
 				decoratedHandler.handle(context);
 			}
 			catch (Throwable t) {
+				context.fail(t);
 			}
 			finally {
 				timer.stop();
