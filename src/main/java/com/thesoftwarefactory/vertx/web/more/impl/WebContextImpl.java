@@ -274,6 +274,10 @@ public class WebContextImpl implements WebContext {
 	public String referer() {
 		if (referer==null) {
 			referer = routingContext.request().getHeader(HttpHeaders.REFERER.toString());
+			if (referer==null) {
+				// some browsers do not send the referer, in that case lets use "/" as a fallback referer
+				referer = "/";
+			}
 		}
 		return referer;
 	}
