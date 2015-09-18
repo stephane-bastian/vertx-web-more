@@ -203,6 +203,7 @@
  */
 package com.thesoftwarefactory.vertx.web.more.impl;
 
+import java.nio.charset.Charset;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -260,7 +261,7 @@ public class WebContextImpl implements WebContext {
 	@Override
 	public I18n i18n() {
 		if (i18n==null) {
-			i18n = new I18n(locale());
+			i18n = new I18n(locale(), Charset.forName("UTF-8"));
 		}
 		return i18n;
 	}
