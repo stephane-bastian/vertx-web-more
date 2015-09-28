@@ -223,8 +223,8 @@ public class WebContextImpl implements WebContext {
 	private Flash flash;
 	private I18n i18n;
 	private Locale locale;
-	private String referer;
 	private RoutingContext routingContext;
+	private String referer;
 	private UserContext userContext;
 	
 	public WebContextImpl(RoutingContext routingContext) {
@@ -261,8 +261,15 @@ public class WebContextImpl implements WebContext {
 	@Override
 	public I18n i18n() {
 		if (i18n==null) {
-			i18n = new I18n(locale(), Charset.forName("UTF-8"));
+			String charset = routingContext().get(I18n.class.getName() + ".charset");
+			
+			if (charset != null) {
+				i18n = new I18n(locale(), Charset.forName(charset));
+			} else {
+				i18n = new I18n(locale());
+			}
 		}
+		
 		return i18n;
 	}
 
@@ -279,14 +286,15 @@ public class WebContextImpl implements WebContext {
 	
 	@Override
 	public String referer() {
-		if (referer==null) {
+		if (referer == null) {
 			referer = routingContext.request().getHeader(HttpHeaders.REFERER.toString());
-	
-			if (referer==null) {
-				// Some browsers do not send the referer, in that case let's use "/" as a fallback referer
+
+			if (referer == null) {
+				// Some browsers do not send the referer, in that case let's use
+				// "/" as a fallback referer
 				referer = "/";
 			}
-	}
+		}
 		return referer;
 	}
 
@@ -307,13 +315,14 @@ public class WebContextImpl implements WebContext {
 	@Override
 	public UserContext userContext() {
 		if (userContext==null) {
-			if (routingContext.user() instanceof UserContext) {
-				userContext = (UserContext) routingContext.user();
-			}
-			else {
-				userContext = UserContextImpl.anonymous();
-			}
+           if (routingContext.user() instanceof UserContext) {
+               userContext = (UserContext) routingContext.user();
+           }
+           else {
+        	   userContext = UserContextImpl.anonymous();
+           }
 		}
+		
 		return userContext;
 	}
 	
