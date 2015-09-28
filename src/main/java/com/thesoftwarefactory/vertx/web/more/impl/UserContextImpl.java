@@ -37,6 +37,7 @@ public class UserContextImpl implements UserContext {
 		for (String permission: permissions) {
 			this.permissions.add(new WildcardPermission(permission));
 		}
+		this.userId = userId;
 		this.isAuthenticated = isAuthenticated;
 	}
 	
