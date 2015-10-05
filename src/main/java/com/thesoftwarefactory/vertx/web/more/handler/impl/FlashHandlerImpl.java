@@ -203,15 +203,46 @@
  */
 package com.thesoftwarefactory.vertx.web.more.handler.impl;
 
-import com.thesoftwarefactory.vertx.web.more.handler.FlashHandler;
+import static io.vertx.core.http.HttpHeaders.SET_COOKIE;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+
+import com.thesoftwarefactory.vertx.web.more.Flash;
+import com.thesoftwarefactory.vertx.web.more.handler.FlashHandler;
+import com.thesoftwarefactory.vertx.web.more.impl.FlashImpl;
+
+import io.vertx.core.json.Json;
+import io.vertx.ext.web.Cookie;
 import io.vertx.ext.web.RoutingContext;
+import io.vertx.ext.web.impl.CookieImpl;
 
 public class FlashHandlerImpl implements FlashHandler {
 
+	private final static String COOKIE_NAME = "__flsh";
+	
 	@Override
 	public void handle(RoutingContext context) {
-		
+		Cookie flashCookie = context.getCookie(COOKIE_NAME);
+		if (flashCookie!= null) {
+			String decodedValue = URLDecoder.decode(flashCookie.getValue());
+			Flash flash = Json.decodeValue(decodedValue, FlashImpl.class);
+			// put the flash in the routing context
+			Flash.set(flash, context);
+		}
+
+		context.addHeadersEndHandler(fut -> {
+			// get the flash from the routing context And save it to a cookie if it has changed
+			Flash flash = Flash.get(context);
+			if (flash!=null && flash.hasChanged()) {
+				String jsonFlash = Json.encode(flash);
+				String encodedValue = URLEncoder.encode(jsonFlash);
+				Cookie cookie = new CookieImpl(COOKIE_NAME, encodedValue).setHttpOnly(true);
+	        	context.response().headers().add(SET_COOKIE, cookie.encode());
+			}
+			fut.complete();
+		});
+		context.next();
 	}
 
 }

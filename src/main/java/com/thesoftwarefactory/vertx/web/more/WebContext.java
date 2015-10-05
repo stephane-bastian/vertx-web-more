@@ -203,11 +203,9 @@
  */
 package com.thesoftwarefactory.vertx.web.more;
 
-import java.util.Collection;
 import java.util.Locale;
 
 import com.thesoftwarefactory.vertx.web.model.I18n;
-import com.thesoftwarefactory.vertx.web.more.Flash;
 
 import io.vertx.ext.web.Session;
 

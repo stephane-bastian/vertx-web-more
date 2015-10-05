@@ -245,12 +245,13 @@ public class WebContextImpl implements WebContext {
 	@Override
 	public Flash flash() {
 		if (flash == null) {
-			flash = routingContext.get("__flash");
+			flash = Flash.get(routingContext);
 		}
 		
 		// Fallback to avoid NPE
 		if (flash == null) {
-			flash = new FlashImpl();
+			flash = Flash.create();
+			Flash.set(flash, routingContext);
 		}
 		
 		return flash;

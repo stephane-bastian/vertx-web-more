@@ -204,7 +204,6 @@
 package com.thesoftwarefactory.vertx.web.more.handler;
 
 import com.thesoftwarefactory.vertx.web.more.handler.impl.FlashHandlerImpl;
-import com.thesoftwarefactory.vertx.web.more.handler.impl.PortRedirectorImpl;
 
 import io.vertx.core.Handler;
 import io.vertx.ext.web.RoutingContext;

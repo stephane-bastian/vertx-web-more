@@ -203,63 +203,68 @@
  */
 package com.thesoftwarefactory.vertx.web.more.impl;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.thesoftwarefactory.vertx.web.model.impl.MessagesImpl;
 import com.thesoftwarefactory.vertx.web.more.Flash;
 
-public class FlashImpl implements Flash {
+public class FlashImpl extends MessagesImpl implements Flash {
 
-	private final static String KEY_MESSAGES = "__messages__";
-	private final static String KEY_ERRORS = "__errors__";
+	@JsonIgnore
+	@Override
+	public Collection<String> getNames() {
+		// TODO Auto-generated method stub
+		return super.getNames();
+	}
+
+	private boolean hasChanged = false;
+
+	public FlashImpl() {
+		super();
+	}
+
+	@JsonProperty
+	@Override
+	protected Map<String, Collection<String>> getMap() {
+		return super.getMap();
+	}
+
+	@JsonProperty
+	@Override
+	protected void setMap(Map<String, Collection<String>> map) {
+		super.setMap(map);
+	}
+
+	@Override
+	public Flash add(String name, Collection<String> values) {
+		hasChanged = true;
+		return (Flash) super.add(name, values);
+	}
 	
-	private Map<String, Object> map;
+	@Override
+	public Flash add(String name, String value) {
+		hasChanged = true;
+		return (Flash) super.add(name, value);
+	}
 	
 	@Override
-	public List<String> errors() {
-		List<String> result = get(KEY_ERRORS);
-		if (result==null) {
-			result = new ArrayList<>();
-		}
-		return result;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T> T get(String key) {
-		return map!=null ? (T) map.get(key) : null;
+	public boolean hasChanged() {
+		return hasChanged;
 	}
 
 	@Override
-	public Iterable<String> keys() {
-		return map!=null ? map.keySet() : Collections.emptyList();
+	protected Collection<String> newKey(String name) {
+		hasChanged = true;
+		return super.newKey(name);
 	}
 
 	@Override
-	public List<String> messages() {
-		List<String> result = get(KEY_MESSAGES);
-		if (result==null) {
-			result = new ArrayList<>();
-		}
-		return result;
-	}
-
-	@Override
-	public Flash put(String key, Object value) {
-		if (map==null) {
-			map = new HashMap<>();
-		}
-		map.put(key, value);
-		return this;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T> T remove(String key) {
-		return map!=null ? (T) map.remove(key) : null;
+	public Flash remove(String name) {
+		hasChanged = true;
+		return (Flash) super.remove(name);
 	}
 
 }

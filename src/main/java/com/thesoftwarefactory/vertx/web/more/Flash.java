@@ -203,27 +203,26 @@
  */
 package com.thesoftwarefactory.vertx.web.more;
 
-import java.util.List;
-
+import com.thesoftwarefactory.vertx.web.model.Messages;
 import com.thesoftwarefactory.vertx.web.more.impl.FlashImpl;
 
-public interface Flash {
+import io.vertx.ext.web.RoutingContext;
 
+public interface Flash extends Messages {
+	
 	public static Flash create() {
 		return new FlashImpl();
 	}	
-	
-	public List<String> errors();
-	
-	public <T> T get(String key);
-	
-	public Iterable<String> keys();
-	
-	public List<String> messages();
-	
-	public Flash put(String key, Object value);
 
-	public <T> T remove(String key);
+	public static Flash get(RoutingContext context) {
+		return context.get(Flash.class.getName());
+	}	
 
+	public static void set(Flash flash, RoutingContext context) {
+		context.put(Flash.class.getName(), flash);
+	}	
+
+	public boolean hasChanged();
+	
 }
 
