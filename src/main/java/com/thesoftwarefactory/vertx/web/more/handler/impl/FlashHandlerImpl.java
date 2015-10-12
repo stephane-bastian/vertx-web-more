@@ -248,7 +248,6 @@ public class FlashHandlerImpl implements FlashHandler {
 		        	context.response().headers().add(SET_COOKIE, cookie.encode());
 				}
 			}
-			fut.complete();
 		});
 		context.next();
 	}
