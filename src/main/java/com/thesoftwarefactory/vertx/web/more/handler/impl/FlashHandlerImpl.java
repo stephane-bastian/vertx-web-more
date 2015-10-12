@@ -223,7 +223,7 @@ public class FlashHandlerImpl implements FlashHandler {
 	
 	@Override
 	public void handle(RoutingContext context) {
-		Cookie flashCookie = context.getCookie(COOKIE_NAME);
+		Cookie flashCookie = context.removeCookie(COOKIE_NAME);
 		if (flashCookie!= null) {
 			String decodedValue = URLDecoder.decode(flashCookie.getValue());
 			Flash flash = Json.decodeValue(decodedValue, FlashImpl.class);
@@ -234,11 +234,19 @@ public class FlashHandlerImpl implements FlashHandler {
 		context.addHeadersEndHandler(fut -> {
 			// get the flash from the routing context And save it to a cookie if it has changed
 			Flash flash = Flash.get(context);
-			if (flash!=null && flash.hasChanged()) {
-				String jsonFlash = Json.encode(flash);
-				String encodedValue = URLEncoder.encode(jsonFlash);
-				Cookie cookie = new CookieImpl(COOKIE_NAME, encodedValue).setHttpOnly(true);
-	        	context.response().headers().add(SET_COOKIE, cookie.encode());
+			if (flash!=null) {
+				if (flash.hasChanged()) {
+					String jsonFlash = Json.encode(flash);
+					String encodedValue = URLEncoder.encode(jsonFlash);
+					/// the lifetime of the cookie is that most the browser session
+					Cookie cookie = new CookieImpl(COOKIE_NAME, encodedValue).setPath("/").setHttpOnly(true).setMaxAge(Long.MIN_VALUE);
+		        	context.response().headers().add(SET_COOKIE, cookie.encode());
+				}
+				else if (!flash.getNames().isEmpty()){
+					// expire the cookie right away
+					Cookie cookie = new CookieImpl(COOKIE_NAME, "").setPath("/").setHttpOnly(true).setMaxAge(-10000);
+		        	context.response().headers().add(SET_COOKIE, cookie.encode());
+				}
 			}
 			fut.complete();
 		});
